@@ -1,0 +1,56 @@
+﻿@page "/DependencyInjection"
+@inject ITodoService TodoService
+@rendermode @(new InteractiveServerRenderMode(false))
+
+<h1>Todo List</h1>
+<p>dependency injection using singleton pattern</p>
+
+<p>First you have to make an interfance, then a class that implement the interface</p>
+<p>register the interface in the program.cs simple command</p>
+<code>builder.Services.AddSingleton&lt;ITodoService, TodoService&gt;();</code>
+
+<ul>
+    @foreach (var item in _todoItems)
+    {
+        <li>
+            <input type="checkbox" @bind="item.IsCompleted" />
+            <span>@item.Title</span>
+            <button @onclick="() => DeleteTodoItem(item.Id)">Delete</button>
+        </li>
+    }
+</ul>
+
+<input @bind="_newTodoTitle" placeholder="Enter a new todo item" />
+<button @onclick="AddTodoItem">Add</button>
+
+@code {
+    private List<TodoItem> _todoItems = new List<TodoItem>();
+    private string _newTodoTitle = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _todoItems = await TodoService.GetTodoItemsAsync();
+    }
+
+    private async Task AddTodoItem()
+    {
+        if (!string.IsNullOrWhiteSpace(_newTodoTitle))
+        {
+            var newItem = new TodoItem
+                {
+                    Id = _todoItems.Count > 0 ? _todoItems.Max(i => i.Id) + 1 : 1,
+                    Title = _newTodoTitle
+                };
+
+            await TodoService.AddTodoItemAsync(newItem);
+            _newTodoTitle = string.Empty;
+            _todoItems = await TodoService.GetTodoItemsAsync();
+        }
+    }
+
+    private async Task DeleteTodoItem(int id)
+    {
+        await TodoService.DeleteTodoItemAsync(id);
+        _todoItems = await TodoService.GetTodoItemsAsync();
+    }
+}

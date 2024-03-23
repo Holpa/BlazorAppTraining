@@ -1,5 +1,7 @@
+using BlazorAppTraining.Class;
 using BlazorAppTraining.Client.Pages;
 using BlazorAppTraining.Components;
+using BlazorAppTraining.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+
+builder.Services.AddSingleton<ITodoService, TodoService>();
 
 var app = builder.Build();
 
