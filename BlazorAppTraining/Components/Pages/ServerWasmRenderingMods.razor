@@ -1,0 +1,21 @@
+﻿@page "/ServerWasmRenderingMods"
+@rendermode @(new InteractiveServerRenderMode(false))
+<h3>ServerWasmRenderingMods</h3>
+
+<p>This mode purpose is to examin the idea of renderingmode regardless of
+    what type of interactivity</p>
+<p>When the rendering mode is off,the app will act similar to static!
+    In a way that it will load the whole page Once and WILL wait for any ASYNC </p>
+
+<code>@("@rendermode @(new InteractiveServerRenderMode(false))")</code>
+<p>or</p>
+<code>@("@rendermode @(new InteractiveServerRenderMode(false))")</code>
+
+<p>This mode is same as SignalR since I am using InteractiveServer without the rush
+    of displaying the html regardless of what on it
+</p>
+<p>Additional to it RenderMode(true/false)</p>
+<p>the purpiose of the rendermode in the interactive modes is that the
+    page will render ONCE which makes it good for heavy pages!</p>
+
+<Weather></Weather>

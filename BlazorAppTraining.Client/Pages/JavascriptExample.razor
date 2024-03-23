@@ -1,0 +1,12 @@
+﻿@inject IJSRuntime JSRuntime
+
+<h1>JavaScript Interop Example</h1>
+
+<button class="btn btn-primary" @onclick="ShowAlert">Show Alert</button>
+
+@code {
+    private async Task ShowAlert()
+    {
+        await JSRuntime.InvokeVoidAsync("alert", "Hello from Blazor!");
+    }
+}

@@ -1,0 +1,200 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+
+<div class="my-1 container-fluid px-5">
+    <h1>Blazor Render Modes</h1>
+    <p>This App to demonstrate Rendering types in blazor</p>
+
+    <p>
+        make sure that there is no rendering functionalities on any of the
+        parents components such as app.razor!
+    </p>
+
+    <p>remember ALL the grids you will see has 3 seconds delay! </p>
+    <div class="row mt-3 border shadow">
+        <h2>Server Side Rendered (SSR)</h2>
+        <div class="col-6">
+            <h4><a href="/Static">Static (SSR)</a></h4>
+            <div>
+                <code>(No rendering attribute)</code>
+            </div>
+            <p>
+                This page is fully server-side rendered and serves static HTML.
+                When navigating to /static, before you see any
+                page response the Weather Grid
+            </p>
+            <p>
+                SSR render pages return the entire HTML and CSS to the browser. It behaves and operates like an normal webapge.
+                To see changes you must hit refresh it does not keep any connection the server.
+            </p>
+            <p>
+                Use JS to communicate with server.
+            </p>
+
+        </div>
+        <div class="col-6">
+            <h4><a href="/StreamRendering"> Stream Rendering</a></h4>
+            <div>
+                <code>@("@attribute [StreamRendering]")</code>
+            </div>
+            <p>
+                This page is server-side rendered using streaming rendering. This means the server
+                will send you some HTML immediately and leave the HTTP response stream open until
+                any async operations complete, then send you updated HTML. The updated HTML will be patched
+                into the DOM by Blazor, rather than reloading the page.
+            </p>
+            <p>
+                In this case, you'll see placeholder Weather Grid.
+            </p>
+            <p>
+                After the Streaming the next communication has to be with JS.
+            </p>
+
+        </div>
+        <div class="col-12">
+            <h5>Pros:</h5>
+            <ul>
+                <li>Fewer server resources required</li>
+                <li>
+                    Page renders quickly on the client, especially with the help of Blazor’s “Enhanced Navigation”
+                    Static HTML is a benefit for SEO
+                </li>
+                <li>
+                    Streaming Rendering makes it easy to render placeholder content while long-running async tasks complete on the server
+                </li>
+            </ul>
+            <h5>Cons:</h5>
+            <ul>
+                <li>JavaScript is required for client-side interactivity after the page is rendered</li>
+                <li>No state is held in components</li>
+                <li>Must use form posting, JavaScript, or page navigation to interact with the server</li>
+            </ul>
+            <h5>Common Use Cases:</h5>
+            <ul>
+                <li>Landing pages</li>
+                <li>Contact page</li>
+                <li>Dashboards</li>
+                <li>Content that is generally read-only</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row mt-3 border shadow">
+        <h2>Blazor Server with SignalR - Interactive Server</h2>
+        <div class="col-12">
+            <h4><a href="/SignalR">(SignalR) - Interactive Server</a></h4>
+            <div>
+                <code>@("@rendermode RenderMode.InteractiveServer")</code>
+            </div>
+            <p>
+                This page uses interactive Blazor components using the Interactive Server Render Mode. This means the page
+                and its DOM is rendered on the server, but the server keeps track of the DOM and processes events
+                sent from the browser and dynamically updates the page without needing any sort of page refresh.
+                Real-time updates are streamed to the browser via the SignalR connection, and user interactions are
+                streamed to the server via the same connection.
+            </p>
+            <p>
+                Interactive Server will use SignalR. However, SignalR can be used as a seperate component to communicate between pages/clients/servers.
+            </p>
+            <p>
+                Note: There is a delay when navigating to this page as the SignalR connection is established. If the connection
+                is lost or times out, the page will become unresponsive. Typically an error page is displayed. This behavior can be
+                overridden with JavaScript. JavaScript can be used to refresh the connection if the connection is
+                lost to keep the page alive or routed to another endpoint like logout or an index.
+            </p>
+            <p>For this mode to work you have to register the service on the Program.cs in the builder and app!</p>
+            <code>
+                @("builder.Services.AddRazorComponents().AddInteractiveServerComponents()")
+
+                @("app.MapRazorComponents<App>().AddInteractiveServerRenderMode();")
+            </code>
+        </div>
+        <div class="col-12">
+            <h5>Pros:</h5>
+            <ul>
+                <li>The full power of interactive Blazor components, e.g. event handling, component state, callbacks, JS Interop, etc.</li>
+                <li>Secure access to server resources such as services or database queries, since the DOM is managed on the server and all code runs on the server. This means that data can be securely accessed and managed on the server through these components without creating an API endpoint</li>
+                <li>Since state is stored in-memory on the server, form posting and HTTP requests are not required in these components. Any user input is already on the server and can be passed directly to your service layer (note: file uploads are an exception here)</li>
+                <li>Rapid development; developers can create full pages and rich interactions in C# with little to no context switching into JavaScript</li>
+            </ul>
+            <h5>Cons:</h5>
+            <ul>
+                <li>Higher resource usage on the server, as the page state and code execution are maintained and rendered on the server for every client</li>
+                <li>Clients must maintain a web socket connection to the server to use the page. If the connection is lost, the page must be refreshed and page state may be lost</li>
+                <li>Slow/high latency connections to the server can cause latency in user interactions</li>
+            </ul>
+            <h5>Common Use Cases:</h5>
+            <ul>
+                <li>Secure data access</li>
+                <li>Rendering/streaming large datasets from the database</li>
+                <li>Thin-client applications</li>
+                <li>Rapid Prototyping, B2B, or internal business applications</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row mt-3 border shadow">
+        <h2>Blazor WASM</h2>
+        <div class="col-6">
+            <h4><a href="/WASM"> Web Assembly</a></h4>
+            <div>
+                <code>@("@rendermode RenderMode.InteractiveWebAssembly")</code>
+            </div>
+            <p>
+                This page uses interactive Blazor components in Web Assembly. This page will be pre-rendered on the
+                server, but it runs interactively on the client in WASM.
+            </p>
+            <p>
+                The WASM component is also able to use JavaScript to manipulate the DOM, just like the SSR and SignalR,
+                using JSInterop. The WASM component's code is sent to the client, so a malicious user could potentially
+                see and modify the code it contains.
+            </p>
+        </div>
+        <div class="col-6">
+            <h4><a href="/auto"> (Auto Hybrid)</a></h4>
+            <div>
+                <code>@("@rendermode RenderMode.InteractiveAuto")</code>
+            </div>
+            <p>
+                This is the same component used in the WASM page, but now the framework decides where it runs. Sometimes
+                via SignalR, other times in WASM. Blazor attempts to render the component in whatever mode is fastest.
+                In testing, the first time the page loads it is typically in SignalR as the WASM code and runtime are
+                downloaded, and a reload will typically switch over to WASM execution.
+            </p>
+            <p>
+                The component has a <code>Console.WriteLine()</code> that runs after it renders. If it's running in WASM,
+                you'll see the message logged in the JavaScript console. If it's running via SignalR, the message will be
+                logged in the server's terminal output.
+            </p>
+            <p>
+                Because this component <i>may</i> execute in WASM, it must be written with the same considerations as a
+                WASM-only component. This means that any code or resources in the component may be available to the client,
+            </p>
+        </div>
+        <div class="col-12">
+            <h5>Pros:</h5>
+            <ul>
+                <li>Highly efficient execution in WebAssembly and immediate UI response, since execution is entirely on the client</li>
+                <li>Decreased resource usage on the server, since the component(s) and runtime are downloaded to the client and rendered by the client. After serving the app, the only load on the server is responding to API requests from the client app</li>
+                <li>Auto Mode means that the user can interact with your Blazor components via whatever method is fastest</li>
+                <li>WASM can support completely offline interaction as long as the component doesn’t need to request data from the server</li>
+            </ul>
+            <h5>Cons:</h5>
+            <ul>
+                <li>Communication with the server must take place via HTTP requests, since components are executing on the client. This means a secure API layer is required to send/retrieve data from the server</li>
+                <li>All code in WASM/Auto components are downloaded to the client, which means any code or resources in WASM components are available to end users. Secrets must be maintained on the server separate from the component</li>
+                <li>
+                    Pure WASM components must have their code downloaded along with the .NET WASM runtime before they’re rendered, which can lead to slower page loads.
+                    Rendering in Auto Mode circumvents this by rendering the component immediately via SignalR until the WASM runtime is downloaded and ready to execute, then seamlessly transitions to client-side rendering in WASM. If the runtime is already available, components will immediately render in WASM
+                </li>
+            </ul>
+            <h5>Common Use Cases:</h5>
+            <ul>
+                <li>Large scale consumer web applications</li>
+                <li>Applications with offline support or PWAs</li>
+                <li>Front ends for existing Web APIs</li>
+                <li>Computationally expensive applications</li>
+            </ul>
+        </div>
+    </div>
+</div>

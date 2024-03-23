@@ -1,0 +1,36 @@
+﻿@page "/WebAssemblyInteractive"
+@rendermode InteractiveWebAssembly
+
+<h3>WebAssemblyInteractive</h3>
+<p> For this to work you have to add the following in .csproj</p>
+<p> Additionally it is a MUST to make a new blazor project and calls it {projectname}.Client</p>
+<code>
+    &lt;ItemGroup&gt;
+    &lt;PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" /&gt;
+    &lt;PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" /&gt;
+    &lt;/ItemGroup&gt;
+</code>
+
+<p>then in program.cs</p> <code>
+    builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents()
+    .AddInteractiveWebAssemblyComponents();
+    app.MapRazorComponents&lt;App&gt;() .AddInteractiveServerRenderMode() .AddInteractiveWebAssemblyRenderMode();
+
+</code>
+
+<p>Current count: @counter</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Increment</button>
+
+<weather></weather>
+
+<JavascriptExample></JavascriptExample>
+@code {
+    private int counter = 0;
+
+    private void IncrementCount()
+    {
+        counter++;
+    }
+}

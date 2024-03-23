@@ -1,0 +1,24 @@
+﻿@page "/signalr"
+@rendermode InteractiveServer
+<h3>SignalR - Interactive Server Rendering</h3>
+
+<p> Server interactive is on</p>
+<code>@("@rendermode InteractiveServer")"</code>
+
+<p>This mode is a special case of SignalR, SignalR can be a component on its own</p>
+<p>For this example will use the blazor 8 embeded signalR</p>
+<p>For the seperate SignalR will be a different example but they do work similarly</p>
+<p>check the websocket! </p>
+<p>This approach loads the form as soon as possible and will reRENDER the form again once it matures which could do a double async calls! be aware!</p>
+<p>This approach is good for Search Engine Optimization as Microsoft says</p>
+
+<p>turn off the project/debugger</p>
+<p>you will notice something different!</p>
+<p>if you put a break point on Weather you will findout that the weather component gets constructed TWICE</p>
+<Weather></Weather>
+
+<a href="\ServerWasmRenderingMods">Go to Interactive without double rendering</a>
+
+@code {
+
+}

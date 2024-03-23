@@ -1,0 +1,59 @@
+﻿@page "/auto"
+@using Microsoft.AspNetCore.Components.Web
+@inject IJSRuntime JSRuntime
+
+@rendermode InteractiveAuto
+
+<h3>Auto</h3>
+
+<p>
+    This mode is a combination of ServerInteractive SignalR + WASM
+</p>
+
+<p>
+    At first, it will start as SignalR, then the WASM will be downloaded
+</p>
+
+<code>@("@rendermode InteractiveAuto")</code>
+
+<p>Read the WASM page configurations that have to be done!</p>
+
+<p>Current render mode: @CurrentRenderMode</p>
+
+@if (!string.IsNullOrEmpty(Message))
+{
+    <div class="alert alert-info">@Message</div>
+}
+
+@code {
+    private string CurrentRenderMode { get; set; } = "";
+    private string Message { get; set; } = "";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            CurrentRenderMode = "Server";
+            Message = "Initial render mode: Server";
+            await LogToConsole(Message);
+            StateHasChanged();
+        }
+        else
+        {
+            var renderMode = await JSRuntime.InvokeAsync<string>("getBlazorRenderMode");
+            if (renderMode == "webassembly" && CurrentRenderMode != "WebAssembly")
+            {
+                CurrentRenderMode = "WebAssembly";
+                Message = "Render mode switched to: WebAssembly";
+                await LogToConsole(Message);     
+                StateHasChanged();
+            }
+        }
+    }
+
+
+    private async Task LogToConsole(string message)
+    {
+        await JSRuntime.InvokeVoidAsync("console.log", message);
+    }
+}

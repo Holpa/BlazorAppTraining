@@ -1,0 +1,51 @@
+﻿<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">BlazorAppTraining</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="flex-column">
+        <div class="nav-item" style="margin:1rem;">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+
+        <div class="nav-item" style="margin:1rem;">
+            <NavLink class="nav-link" href="Static">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Static
+            </NavLink>
+        </div>
+
+        <div class="nav-item" style="margin:1rem;">
+            <NavLink class="nav-link" href="StreamRendering">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> StreamRendering
+            </NavLink>
+        </div>
+
+        <div class="nav-item" style="margin:1rem;">
+            <NavLink class="nav-link" href="SignalR">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> SignalR
+            </NavLink>
+        </div>
+
+        <div class="nav-item" style="margin:1rem;">
+            <NavLink class="nav-link" href="WebAssemblyInteractive">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> WASM
+            </NavLink>
+        </div>
+
+        <div class="nav-item" style="margin:1rem;">
+            <NavLink class="nav-link" href="Auto">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Auto
+            </NavLink>
+        </div>
+
+
+
+    </nav>
+</div>
+
